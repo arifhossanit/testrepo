@@ -51,21 +51,24 @@
                     </thead>
 
                     <tbody>
-
+                    @forelse ($data as $key=>$item)
                     <tr>
-                        <td>1</td>
-                        <td>T-Shirt <br> Created at : 25-Aug-2020</td>
-                        <td>Quality product in low cost</td>
+                        <?php 
+                        $date=date("F j, Y", strtotime($item->description));
+                        ?>
+                        <td>{{$key+1}}</td>
+                        <td>{{$item->title}} <br> Created at : {{$date}}</td>
+                        <td>{{$item->description}}</td>
                         <td>
                             <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
 
-                                <dt class="col-sm-3 pb-0">
-                                    SM/ Red/ V-Nick
+                                <dt class="col-sm-10 pb-0">
+                                    {{$item->variant}}
                                 </dt>
-                                <dd class="col-sm-9">
+                                <dd class="col-sm-12">
                                     <dl class="row mb-0">
-                                        <dt class="col-sm-4 pb-0">Price : {{ number_format(200,2) }}</dt>
-                                        <dd class="col-sm-8 pb-0">InStock : {{ number_format(50,2) }}</dd>
+                                        <dt class="col-sm-6 pb-0">Price : {{ number_format($item->price,2) }}</dt>
+                                        <dd class="col-sm-6 pb-0">InStock : {{ number_format($item->stock) }}</dd>
                                     </dl>
                                 </dd>
                             </dl>
@@ -77,7 +80,9 @@
                             </div>
                         </td>
                     </tr>
-
+                    @empty
+                        <p>No users</p>
+                    @endforelse
                     </tbody>
 
                 </table>
@@ -88,10 +93,10 @@
         <div class="card-footer">
             <div class="row justify-content-between">
                 <div class="col-md-6">
-                    <p>Showing 1 to 10 out of 100</p>
+                    <p>Showing {{$data->firstItem()}} to {{$data->lastItem()}} out {!!__('of')!!} {{$data->total()}}</p>
                 </div>
                 <div class="col-md-2">
-
+                    {{ $data->onEachSide(5)->links() }}
                 </div>
             </div>
         </div>
